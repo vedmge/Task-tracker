@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
-const AddTask = ({ onAdd }) => {
-    const [text, setText] = useState('')
-    const [day, setDay] = useState('')
-    const [reminder, setReminder] = useState(false)
+const EditTask = ({ onEdit, task }) => {
+    const [id, setId] = useState(task !== null ? task.id : '')
+    const [text, setText] = useState(task !== null ? task.text : '')
+    const [day, setDay] = useState(task !== null ? task.day : '')
+    const [reminder, setReminder] = useState(task !== null ? task.reminder : false)
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -13,8 +14,9 @@ const AddTask = ({ onAdd }) => {
             return
         }
 
-        onAdd( { text, day, reminder} )
+        onEdit( { id, text, day, reminder} )
 
+        setId('')
         setText('')
         setDay('')
         setReminder(false)
@@ -52,4 +54,4 @@ const AddTask = ({ onAdd }) => {
     )
 }
 
-export default AddTask
+export default EditTask

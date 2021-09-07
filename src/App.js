@@ -1,10 +1,11 @@
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
 import { useState } from 'react'
-import AddTask from "./components/AddTask";
+import EditTask from "./components/EditTask";
 
 function App() {
   const [showAddTask, setShowAddTask] = useState(false)
+  const [taskToEdit, setTaskToEdit] = useState(null)
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -27,10 +28,19 @@ function App() {
   ])
 
   // Add Task
-  const addTask = (task) => {
-    const id = Math.floor(Math.random()* 10000 +1)
-    const newTask = {id, ...task}
-    setTasks([...tasks, newTask])
+  const addTask = (someTask) => {
+    const filteredTasks = tasks.filter((task) => task.id === someTask.id)
+    if (filteredTasks.length > 0) {
+      setTasks(tasks.map((task) =>
+        task.id === someTask.id ? { ...task, text: someTask.text, day: someTask.day, reminder: someTask.reminder } : task
+      ))
+    } else {
+      const id = Math.floor(Math.random() * 10000 + 1)
+      const newTask = { id, ...someTask }
+      setTasks([...tasks, newTask])
+    }
+    setTaskToEdit(null)
+    setShowAddTask(false)
   }
 
   // Delete Task
@@ -45,16 +55,17 @@ function App() {
     ))
   }
 
-  // // Change Task
-  // const changeTask = (id) => {
-
-  // }
+  // Toggle Edit
+  const toggleEdit = (taskToEdit) => {
+    setTaskToEdit(taskToEdit)
+    setShowAddTask(true)
+  }
 
   return (
     <div className="container">
-      <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask}/>
-      {showAddTask && <AddTask onAdd={addTask} />}
-      {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} /> : 'No Tasks To Show'}
+      <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+      {showAddTask && <EditTask onEdit={addTask} task={taskToEdit} />}
+      {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} toggleEdit={toggleEdit} /> : 'No Tasks To Show'}
     </div>
   );
 }

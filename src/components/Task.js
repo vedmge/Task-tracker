@@ -1,17 +1,17 @@
 import { FaTimes } from 'react-icons/fa'
 import { FaPen } from 'react-icons/fa'
 
-const Task = ({ task, onDelete, onToggle/* , onChange */ }) => {
+const Task = ({ task, onDelete, onToggle, toggleEdit }) => {
     return (
         <div className={`task ${task.reminder ? 'reminder' : ''}`} onDoubleClick={() => onToggle(task.id)}>
             <h3>{task.text}
                 <span>
-                    {/* <FaPen
+                    {<FaPen
                         style={{
                             color: 'grey',
                             cursor: 'pointer'
                         }}
-                        onClick={() => onChange(task.id)} /> */}
+                        onClick={() => toggleEdit(task)} />}
                     <FaTimes
                         style={{
                             color: 'red',
